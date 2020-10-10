@@ -1,65 +1,70 @@
-
 class Book{
   final String kind;
   final String id;
-  final VolumeInfo volumeInfo;
-  final String textSnippet;
-
-  Book({this.textSnippet, this.kind, this.id, this.volumeInfo});
-
-  factory Book.fromJson(Map<String, dynamic> json){
-    return Book(
-      kind: json["kind"],
-      id: json["id"],
-      //verify if json["searchInfo"] is null
-      textSnippet: (json["searchInfo"]?? "")==""
-          ?"" //if null, return empty string ""
-          :(json["searchInfo"] as Map<String, dynamic>)["textSnippet"] ?? "",//else return textSnippet field
-      volumeInfo: VolumeInfo.fromJson(json["volumeInfo"])
-    );
-  }
-
-  String filter(){
-    if(volumeInfo.description==""){
-      return textSnippet.replaceAll(RegExp("<.+>|\&nbsp|[;\+]"), "");
-    }
-    return volumeInfo.description.replaceAll(RegExp("<.+>|\&nbsp|[;\+]"), "");
-  }
-}
-
-class VolumeInfo{
   final String title;
   final List<String> authors;
   final String publisher;
   final String description;
-  final ImageLinks imageLinks;
+  final String smallThumbnail;
+  final String thumbnail;
+  final String textSnippet;
 
-  VolumeInfo({this.publisher, this.description, this.imageLinks, this.title, this.authors});
+  Book({
+    this.kind,
+    this.id,
+    this.title,
+    this.authors,
+    this.publisher,
+    this.description,
+    this.smallThumbnail,
+    this.thumbnail,
+    this.textSnippet
+  });
 
-  factory VolumeInfo.fromJson(Map<String, dynamic> json){
-    return VolumeInfo(
-      title: json["title"],
-      authors: (json["authors"] as List)?.map((e) => (e as String))?.toList(),
-      imageLinks: json["imageLinks"]==null
-          ?null
-          :ImageLinks.fromJson(json["imageLinks"]),
-      description: json["description"] ?? "",
-      publisher: json["publisher"]
+  factory Book.fromJson(Map<String,dynamic> json){
+    Map<String, dynamic> volumeInfo = json['volumeInfo'] ?? {};
+    Map<String, dynamic> imageLinks = volumeInfo['imageLinks'] ?? {};
+    Map<String, dynamic> searchInfo = json['searchInfo'] ?? {};
+
+    return Book(
+      kind: json['kind'] ?? null,
+      id: json['id'] ?? null,
+      title: json['title'] ?? volumeInfo['title'] ?? null,
+      authors: ((json['authors'] ?? volumeInfo['authors'] ?? []) as List).map((e) => e as String).toList(),
+      publisher: json['publisher'] ?? volumeInfo['publisher'] ?? null,
+      description: json['description'] ?? volumeInfo['description'] ?? null,
+      smallThumbnail: json['smallThumbnail'] ?? imageLinks['smallThumbnail'] ?? null,
+      thumbnail: json['thumbnail'] ?? imageLinks['thumbnail'] ?? null,
+      textSnippet: json['textSnippet'] ?? searchInfo['textSnippet'] ?? null,
     );
   }
 
-}
+  Map<String, dynamic> toJson(){
+    Map<String, dynamic> temp = {};
+    if(kind!=null){temp.addAll({"kind": kind});}
+    if(id!=null){temp.addAll({"id": id});}
+    if(title!=null){temp.addAll({"title": title});}
+    if(authors.length>0){temp.addAll({"authors": authors});}
+    if(publisher!=null){temp.addAll({"publisher": publisher});}
+    if(description!=null){temp.addAll({"description": description});}
+    if(smallThumbnail!=null){temp.addAll({"smallThumbnail": smallThumbnail});}
+    if(thumbnail!=null){temp.addAll({"thumbnail": thumbnail});}
+    if(textSnippet!=null){temp.addAll({"textSnippet": textSnippet});}
+    return temp;
+  }
 
-class ImageLinks{
-  final String smallThumbnail;
-  final String thumbnail;
+  String filterThumbnail(){
+    if(thumbnail!=null) {
+      thumbnail.replaceAll("&edge=curl", "");
+    }
+    return null;
+  }
+  String filterDescription() {
+    if (description == null && textSnippet != null) {
+      return textSnippet.replaceAll(RegExp("<.+>|\&nbsp|[;\+]"), "");
+    }
+    if(textSnippet == null && description == null) return "No description";
 
-  ImageLinks({this.smallThumbnail, this.thumbnail});
-
-  factory ImageLinks.fromJson(Map<String, dynamic> json){
-    return ImageLinks(
-      thumbnail: (json["thumbnail"] as String).replaceAll("&edge=curl", ""),
-      smallThumbnail: (json["smallThumbnail"] as String) ?? ""
-    );
+    return description;
   }
 }

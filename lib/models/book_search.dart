@@ -1,16 +1,36 @@
+import 'book.dart';
+
 class BookSearch{
   String term;
+  int totalItems;
   int maxResults;
   int startIndex = 0;
+  String searchType; // intitle, inauthor, inpublisher, subject, isbn
+  String sorting; // relevance , newest
+  String filter; // full , free-ebooks, paid-ebooks, ebooks
+  String printType;
+  List<Book> books;
 
-  BookSearch({this.maxResults, this.startIndex,this.term});
+  BookSearch({
+    this.totalItems,
+    this.term,
+    this.searchType,
+    this.sorting,
+    this.filter,
+    this.printType
+  }): maxResults = 10;
 
-  String url(){
-    return "https://www.googleapis.com/books/v1/volumes?q=${this.term}";
+  factory BookSearch.empty(){
+   return BookSearch();
   }
+  factory BookSearch.params(BookSearch bookSearch){
 
-  String urlnext(){
-    startIndex +=10;
-    return "https://www.googleapis.com/books/v1/volumes?q=${this.term}&startIndex=${this.startIndex}";
+    return BookSearch(
+      term: bookSearch.term,
+      searchType: bookSearch.searchType=="none"?null:bookSearch.searchType,
+      sorting: bookSearch.sorting,
+      filter: bookSearch.filter=="none"?null:bookSearch.filter,
+      printType: bookSearch.printType=="none"?null:bookSearch.printType
+    );
   }
 }
