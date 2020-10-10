@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:book_finder/models/book.dart';
 import 'package:book_finder/models/book_search.dart';
 import 'package:book_finder/service/book_finder_service.dart';
 import 'package:rxdart/rxdart.dart';
@@ -10,25 +9,51 @@ class BookFinderManager{
   Stream<BFState> get finder$ => _controller.stream;
 
   void search(BookSearch search) async {
-
     _controller.add(LoadingBFState());
     Future.delayed(Duration(seconds: 2));
-    await BookFinderService.browseBook(search.url())
-        .then((bookList) => _controller.add(LoadedBFState(bookList, search)))
+    await BookFinderService.browseBook(search)
+        .then((value) => _controller.add(LoadedBFState(value)))
         .catchError((error){
           print(error.toString());
           _controller.add(ErrorFBState());
         });
   }
 
-  void nextPage(BookSearch search) async {
-    List<Book> _books = await BookFinderService.browseBook(search.urlnext());
-    print(_books.length);
-    // _controller.add(_books);
-  }
-
   void dispose(){
     _controller.close();
+  }
+
+  void searchLeftNavigate(BookSearch bookSearch) async {
+    final _bookSearch = BookSearch.copy(bookSearch);
+    _controller.add(LoadingBFState());
+    Future.delayed(Duration(seconds: 2));
+    if(_bookSearch.startIndex!=0){
+      if(_bookSearch.startIndex-_bookSearch.maxResults>=0) _bookSearch.startIndex-=_bookSearch.maxResults;
+      else bookSearch.startIndex = 0;
+      await BookFinderService.browseBook(_bookSearch)
+          .then((value) => _controller.add(LoadedBFState(value)))
+          .catchError((error){
+        print(error.toString());
+        _controller.add(ErrorFBState());
+      });
+    }
+  }
+
+  void searchRightNavigate(BookSearch bookSearch) async {
+    final _bookSearch = BookSearch.copy(bookSearch);
+    _controller.add(LoadingBFState());
+    Future.delayed(Duration(seconds: 2));
+    if(_bookSearch.startIndex+_bookSearch.maxResults<_bookSearch.totalItems){
+      print(_bookSearch.maxResults);
+      _bookSearch.startIndex+=_bookSearch.maxResults;
+      print(_bookSearch.maxResults);
+      await BookFinderService.browseBook(_bookSearch)
+          .then((value) => _controller.add(LoadedBFState(value)))
+          .catchError((error){
+        print(error.toString());
+        _controller.add(ErrorFBState());
+      });
+    }
   }
 
 }
@@ -47,8 +72,7 @@ class LoadingBFState extends BFState{
 
 class LoadedBFState extends BFState{
   final BookSearch search;
-  final List<Book> book;
-  const LoadedBFState(this.book, this.search);
+  const LoadedBFState(this.search);
 }
 
 class ErrorFBState extends BFState{

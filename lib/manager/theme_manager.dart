@@ -4,12 +4,22 @@ import 'package:rxdart/rxdart.dart';
 
 
 class ThemeManager{
+  BehaviorSubject _controller;
 
-  final _controller = BehaviorSubject<ThemeState>.seeded(InitialThemeState());
+
+  ThemeManager();
+
+  Future init() async{
+    ThemeData theme = await  ThemeService.getLastTheme();
+    _controller = BehaviorSubject<ThemeState>.seeded(InitialThemeState(theme));
+  }
+
+
   Stream get themeStream$ => _controller.stream;
 
+
   void switchTheme(){
-    ThemeData theme = _controller.stream.value.theme;
+      ThemeData theme = _controller.stream.value.theme;
       if(theme == appThemeData[AppTheme.LightTheme]){
         _controller.add(DarkThemeState());
       }else{
@@ -44,11 +54,8 @@ class LightThemeState extends ThemeState{
 }
 
 class InitialThemeState extends ThemeState{
-  ThemeData theme;
-  InitialThemeState(){
-    _getLastTheme();
-  }
-  _getLastTheme() async {
-    theme = await ThemeService.getLastTheme();
-  }
+  final ThemeData theme;
+  InitialThemeState(this.theme);
+  InitialThemeState.light() : theme = appThemeData[AppTheme.LightTheme];
+  InitialThemeState.dark() : theme = appThemeData[AppTheme.DarkTheme];
 }

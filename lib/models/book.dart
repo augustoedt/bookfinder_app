@@ -4,7 +4,6 @@ class Book{
   final String id;
   final VolumeInfo volumeInfo;
   final String textSnippet;
-
   Book({this.textSnippet, this.kind, this.id, this.volumeInfo});
 
   factory Book.fromJson(Map<String, dynamic> json){
@@ -39,7 +38,7 @@ class VolumeInfo{
   factory VolumeInfo.fromJson(Map<String, dynamic> json){
     return VolumeInfo(
       title: json["title"],
-      authors: (json["authors"] as List)?.map((e) => (e as String))?.toList(),
+      authors: ((json["authors"] as List)?.map((e) => (e as String))?.toList()) ?? [],
       imageLinks: json["imageLinks"]==null
           ?null
           :ImageLinks.fromJson(json["imageLinks"]),
