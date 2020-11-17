@@ -23,3 +23,7 @@ This simple App was made for study purpose in **Patterns** / **Tests** / **UI-de
 ------------
 
 #### Screenshots
+
+![picture](https://github.com/augustoedt123/bookfinder_app/raw/main/images/screen1.png "picture")
+
+![picture](https://github.com/augustoedt123/bookfinder_app/raw/main/images/screen2.png "picture")
