@@ -21,8 +21,9 @@ class BookSearch{
   }): maxResults = 10;
 
   factory BookSearch.empty(){
-   return BookSearch();
+    return BookSearch();
   }
+
   factory BookSearch.params(BookSearch bookSearch){
 
     return BookSearch(

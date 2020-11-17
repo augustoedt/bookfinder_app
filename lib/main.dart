@@ -4,7 +4,6 @@ import 'package:book_finder/manager/theme_manager.dart';
 import 'package:book_finder/screens/bookfinder.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

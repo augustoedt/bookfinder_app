@@ -35,7 +35,7 @@ class Book{
       description: json['description'] ?? volumeInfo['description'] ?? null,
       smallThumbnail: json['smallThumbnail'] ?? imageLinks['smallThumbnail'] ?? null,
       thumbnail: json['thumbnail'] ?? imageLinks['thumbnail'] ?? null,
-      textSnippet: json['textSnippet'] ?? searchInfo['textSnippet'] ?? null,
+      textSnippet: json['textSnippet'] ?? searchInfo['textSnippet'] ?? null
     );
   }
 

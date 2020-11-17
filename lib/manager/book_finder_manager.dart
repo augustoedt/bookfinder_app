@@ -39,7 +39,6 @@ class BookFinderManager{
   }
 
   void searchRightNavigate(BookSearch bookSearch) async {
-
     if(bookSearch.startIndex+bookSearch.maxResults<bookSearch.totalItems){
       _controller.add(LoadingBFState());
       Future.delayed(Duration(seconds: 2));
