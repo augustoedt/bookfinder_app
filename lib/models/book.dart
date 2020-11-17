@@ -55,7 +55,7 @@ class Book{
 
   String filterThumbnail(){
     if(thumbnail!=null) {
-      thumbnail.replaceAll("&edge=curl", "");
+      return thumbnail.replaceAll("&edge=curl", "");
     }
     return null;
   }
