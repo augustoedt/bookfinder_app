@@ -1,5 +1,6 @@
 import 'package:book_finder/models/book.dart';
-import 'package:book_finder/screens/details_book.dart';
+import 'package:book_finder/screens/detail_book/detail_book.dart';
+import 'package:book_finder/screens/detail_book/detail_book_animator.dart';
 import 'package:flutter/material.dart';
 
 class BookListItem extends StatelessWidget {
@@ -13,7 +14,7 @@ class BookListItem extends StatelessWidget {
       onTap: (){
         Navigator.push(context,
             MaterialPageRoute(
-              builder: (context)=>DetailBook(book)
+              builder: (context)=>DetailBookAnimator(book)
             ));
       },
       child: Column(
