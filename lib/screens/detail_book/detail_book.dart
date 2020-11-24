@@ -3,14 +3,15 @@ import 'package:book_finder/models/book.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:book_finder/screens/detail_book/detail_book_animation.dart';
+
 class DetailBook extends StatelessWidget {
   final Book book;
   final DetailBookAnimation animation;
+
   const DetailBook({
     @required this.book,
     @required this.animation
   });
-
 
 
   Widget _buildHeader(BuildContext context) {
@@ -29,7 +30,8 @@ class DetailBook extends StatelessWidget {
         Text(
           "Detail Book",
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context)
+          style: Theme
+              .of(context)
               .primaryTextTheme
               .headline6
               .copyWith(fontWeight: FontWeight.bold),
@@ -45,8 +47,12 @@ class DetailBook extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 8),
-        Opacity(
-          opacity: animation.pictureOpacity.value,
+        Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.diagonal3Values(
+              animation.pictureSize.value,
+              animation.pictureSize.value, 1.0
+          ),
           child: Container(
               width: 124 * 0.9,
               height: 204 * 0.9,
@@ -55,9 +61,9 @@ class DetailBook extends StatelessWidget {
                 child: book.thumbnail == null
                     ? Center(child: Text("No Image"))
                     : Image.network(
-                        book.thumbnail,
-                        fit: BoxFit.fill,
-                      ),
+                  book.filterThumbnail(),
+                  fit: BoxFit.fill,
+                ),
               )),
         ),
         const SizedBox(height: 8),
@@ -67,7 +73,10 @@ class DetailBook extends StatelessWidget {
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: Theme.of(context).primaryTextTheme.headline2),
+              style: Theme
+                  .of(context)
+                  .primaryTextTheme
+                  .headline2),
         ),
         const SizedBox(height: 5),
         Opacity(
@@ -75,7 +84,10 @@ class DetailBook extends StatelessWidget {
           child: Text(
             book.authors.join(", "),
             textAlign: TextAlign.center,
-            style: Theme.of(context).primaryTextTheme.headline6,
+            style: Theme
+                .of(context)
+                .primaryTextTheme
+                .headline6,
           ),
         ),
         SizedBox(
@@ -84,7 +96,8 @@ class DetailBook extends StatelessWidget {
       ],
     );
   }
-  Widget _buildDescriptionAnimation(BuildContext context){
+
+  Widget _buildDescriptionAnimation(BuildContext context) {
     return Transform(
       transform: Matrix4.translationValues(
           0,
@@ -97,13 +110,21 @@ class DetailBook extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildDescription(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height*0.5,
-      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.5,
+      padding: EdgeInsets.symmetric(
+          vertical: 18, horizontal: 14),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+          color: Theme
+              .of(context)
+              .scaffoldBackgroundColor
+              .withOpacity(0.7),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       child: Column(
@@ -117,12 +138,18 @@ class DetailBook extends StatelessWidget {
                   width: double.infinity,
                   child: (book.description == "")
                       ? Text(
-                          "Description\n\n${book.filterDescription()}",
-                          style: Theme.of(context).primaryTextTheme.headline4,
-                        )
+                    "Description\n\n${book.filterDescription()}",
+                    style: Theme
+                        .of(context)
+                        .primaryTextTheme
+                        .headline4,
+                  )
                       : Text("Description\n\n${book.filterDescription()}",
-                          style:
-                              Theme.of(context).primaryTextTheme.headline4),
+                      style:
+                      Theme
+                          .of(context)
+                          .primaryTextTheme
+                          .headline4),
                 ),
               ),
             ),
@@ -136,8 +163,12 @@ class DetailBook extends StatelessWidget {
               SizedBox(
                 width: 70,
                 child: OutlineButton(
-                    highlightedBorderColor: Theme.of(context).accentColor,
-                    splashColor: Theme.of(context).accentColor,
+                    highlightedBorderColor: Theme
+                        .of(context)
+                        .accentColor,
+                    splashColor: Theme
+                        .of(context)
+                        .accentColor,
                     color: Colors.white10,
                     borderSide: BorderSide(color: Colors.white10, width: 2),
                     child: Icon(
@@ -151,14 +182,17 @@ class DetailBook extends StatelessWidget {
               ),
               Expanded(
                 child: RaisedButton(
-                    color: Theme.of(context).accentColor,
+                    color: Theme
+                        .of(context)
+                        .accentColor,
                     child: Text("Start Reading",
-                        style: Theme.of(context)
+                        style: Theme
+                            .of(context)
                             .primaryTextTheme
                             .headline6
                             .copyWith(
-                                color: Colors.black87,
-                                fontWeight: FontWeight.bold)),
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold)),
                     onPressed: () {}),
               ),
             ],
@@ -179,15 +213,18 @@ class DetailBook extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimation(BuildContext context, Widget child){
+  Widget _buildAnimation(BuildContext context, Widget child) {
     return Stack(
       alignment: AlignmentDirectional.topStart,
       fit: StackFit.expand,
       children: [
         book.thumbnail != null
-            ? Image.network(
-          book.thumbnail,
-          fit: BoxFit.cover,
+            ? Hero(
+          tag: book.id,
+          child: Image.network(
+            book.thumbnail,
+            fit: BoxFit.cover,
+          ),
         )
             : Container(),
         BackdropFilter(
@@ -196,7 +233,10 @@ class DetailBook extends StatelessWidget {
               sigmaY: animation.backdropBlurY.value
           ),
           child: Container(
-            color: Theme.of(context).primaryColor.withOpacity(animation.backdropOpacity.value),
+            color: Theme
+                .of(context)
+                .primaryColor
+                .withOpacity(animation.backdropOpacity.value),
             child: _buildContent(context),
           ),
         ),
@@ -208,10 +248,10 @@ class DetailBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: AnimatedBuilder(
-          animation: animation.controller,
-          builder: _buildAnimation,
-        )
+          body: AnimatedBuilder(
+            animation: animation.controller,
+            builder: _buildAnimation,
+          )
       ),
     );
   }

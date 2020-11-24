@@ -21,6 +21,22 @@ class _SearchTextFieldState extends State<SearchTextField> {
   String searchType = "none";
   String term;
 
+  Widget _buildRow(List<String> values, {Widget child, Function onSelected}) {
+    return Row(
+      children: [
+        child,
+        PopupMenuButton<String>(
+            onSelected: onSelected,
+            itemBuilder: (context) => values.map<PopupMenuItem<String>>((e) {
+                  return PopupMenuItem(
+                    child: Text(e),
+                    value: e.toLowerCase(),
+                  );
+                }).toList())
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final BookFinderManager manager = GetIt.I.get<BookFinderManager>();
@@ -32,8 +48,9 @@ class _SearchTextFieldState extends State<SearchTextField> {
         ),
         ListTile(
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
+              Flexible(
                 flex: 8,
                 child: Container(
                     width: 350,
@@ -54,7 +71,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
                             onPressed: () {
                               print("Icon Submit");
                               widget.bookSearch.term = term;
-                              manager.search(BookSearch.params(widget.bookSearch));
+                              manager
+                                  .search(BookSearch.params(widget.bookSearch));
                               // manager.search(BookSearch(term: value));
                             },
                             icon: Icon(Icons.search),
@@ -74,10 +92,10 @@ class _SearchTextFieldState extends State<SearchTextField> {
             ],
           ),
           subtitle: showOptions
-              ? Row(children: [
+              ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: buildRow(['relevance', 'newest'],
+                    child: _buildRow(['relevance', 'newest'],
                         child: Text(widget.bookSearch.sorting == null
                             ? "relevance"
                             : widget.bookSearch.sorting), onSelected: (value) {
@@ -88,14 +106,16 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: buildRow([
+                    child: _buildRow([
                       'none',
                       'full',
                       'free-ebooks',
                       'paid-ebooks',
                       'ebooks'
-                    ], child: Text(widget.bookSearch.filter ==null? "none":widget.bookSearch.filter),
-                        onSelected: (value) {
+                    ],
+                        child: Text(widget.bookSearch.filter == null
+                            ? "none"
+                            : widget.bookSearch.filter), onSelected: (value) {
                       setState(() {
                         widget.bookSearch.filter = value;
                       });
@@ -103,7 +123,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: buildRow([
+                    child: _buildRow([
                       'none',
                       'intitle',
                       'inauthor',
@@ -122,8 +142,11 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: buildRow(['none', 'all', 'books', 'magazines'],
-                        child: Text(widget.bookSearch.printType==null?"none":widget.bookSearch.printType), onSelected: (value) {
+                    child: _buildRow(['none', 'all', 'books', 'magazines'],
+                        child: Text(widget.bookSearch.printType == null
+                            ? "none"
+                            : widget.bookSearch.printType),
+                        onSelected: (value) {
                       setState(() {
                         widget.bookSearch.printType = value;
                       });
@@ -161,22 +184,6 @@ class _SearchTextFieldState extends State<SearchTextField> {
             : Container(),
       ],
     ));
-  }
-
-  Widget buildRow(List<String> values, {Widget child, Function onSelected}) {
-    return Row(
-      children: [
-        child,
-        PopupMenuButton<String>(
-            onSelected: onSelected,
-            itemBuilder: (context) => values.map<PopupMenuItem<String>>((e) {
-                  return PopupMenuItem(
-                    child: Text(e),
-                    value: e.toLowerCase(),
-                  );
-                }).toList())
-      ],
-    );
   }
 
   String fieldFilter(String field) {

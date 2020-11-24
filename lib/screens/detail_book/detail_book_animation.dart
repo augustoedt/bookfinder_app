@@ -2,11 +2,11 @@ import 'package:flutter/animation.dart';
 
 class DetailBookAnimation {
   DetailBookAnimation(this.controller)
-      : backdropBlurX = Tween(begin: 0.0, end: 30.0).animate(
+      : backdropBlurX = Tween(begin: 0.0, end: 50.0).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
-                0.0,
+                0.15,
                 0.65,
                 curve: Curves.ease
             ))),
@@ -14,7 +14,7 @@ class DetailBookAnimation {
             CurvedAnimation(
                 parent: controller,
                 curve: Interval(
-                    0.0,
+                    0.15,
                     0.65,
                     curve: Curves.ease
                 ))),
@@ -22,7 +22,7 @@ class DetailBookAnimation {
           CurvedAnimation(
             parent: controller,
             curve:  Interval(
-                0.0,
+                0.15,
                 0.650,
                 curve: Curves.ease
             ))),
@@ -40,7 +40,7 @@ class DetailBookAnimation {
                 curve: Interval(
                     0.5,
                     0.65,
-                    curve: Curves.ease
+                    curve: Curves.slowMiddle
                 ))),
         titleOpacity = Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
@@ -58,13 +58,13 @@ class DetailBookAnimation {
                     0.80,
                     curve: Curves.ease
                 ))),
-        pictureOpacity = Tween(begin: 0.0, end: 1.0).animate(
+        pictureSize = Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: controller,
                 curve: Interval(
-                    0.9,
+                    0.80,
                     1.0,
-                    curve: Curves.ease
+                    curve: Curves.elasticIn
                 )));
 
   final AnimationController controller;
@@ -75,5 +75,5 @@ class DetailBookAnimation {
   final Animation<double> descriptionScrollerYTranslation;
   final Animation<double> titleOpacity;
   final Animation<double> authorsOpacity;
-  final Animation<double> pictureOpacity;
+  final Animation<double> pictureSize;
 }

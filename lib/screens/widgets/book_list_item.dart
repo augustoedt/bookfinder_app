@@ -33,12 +33,15 @@ class BookListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Center(child: Text("No Image"))
                 ),
-              ):Container(
-                width: 128*.8,
-                height: 204*0.8,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(book.thumbnail.replaceAll("&edge=curl", ""), fit: BoxFit.fill,),
+              ):Hero(
+                tag: book.id,
+                child: Container(
+                  width: 128*.8,
+                  height: 204*0.8,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(book.thumbnail.replaceAll("&edge=curl", ""), fit: BoxFit.fill,),
+                  ),
                 ),
               ),
             ],

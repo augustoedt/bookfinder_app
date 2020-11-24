@@ -21,7 +21,7 @@ class _DetailBookAnimatorState extends State<DetailBookAnimator>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 1700),
       vsync: this
     );
     _controller.forward();

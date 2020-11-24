@@ -1,0 +1,7 @@
+include: package:lint/analysis_options.yaml
+
+analyser:
+  errors:
+    missing_required_param: error
+    missing_return: error
+    missing_be_immutable: error

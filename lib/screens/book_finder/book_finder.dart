@@ -12,6 +12,60 @@ import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 
 class BookFinder extends StatelessWidget {
+  Widget _initial() {
+    return SearchTextField(BookSearch.empty());
+  }
+
+  Widget _loading() {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildContent(BuildContext context, BookFinderManager manager){
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder<BFState>(
+          stream: manager.finder$,
+          builder: (_, snapshot) {
+            BFState data = snapshot.data;
+            if (data is LoadingBFState) {
+              return _loading();
+            }
+            if (data is LoadedBFState) {
+              print("snapshot");
+              BookSearch bookSearch = (snapshot.data as LoadedBFState).search;
+              List<Book> bookList = bookSearch.books;
+              return Column(
+                children: [
+                  SearchTextField(bookSearch),
+                  _buildGrid(context, bookList)
+                ],
+              );
+            }
+            if (data is ErrorFBState) {
+              return _initial();
+            }
+            return SearchTextField(BookSearch.empty());
+          },
+        ));
+  }
+
+  Widget _buildGrid(BuildContext context, List<Book> booklist){
+    return Expanded(
+      child: GridView.builder(
+          padding:
+          EdgeInsets.only(left: 12, right: 12, bottom: 12),
+          gridDelegate:
+          SliverGridDelegateWithMaxCrossAxisExtent(
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+              maxCrossAxisExtent: 140,
+              childAspectRatio: 120 / 240),
+          itemCount: booklist.length,
+          itemBuilder: (context, index) {
+            return BookListItem(book: booklist[index]);
+          }),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final BookFinderManager manager = GetIt.I.get<BookFinderManager>();
@@ -31,15 +85,15 @@ class BookFinder extends StatelessWidget {
                           children: [
                             user.userPicUrl == ""
                                 ? CircleAvatar(
-                                    radius: 30,
-                                    child: Icon(Icons.person),
-                                    foregroundColor: Colors.lightBlueAccent,
-                                  )
+                              radius: 30,
+                              child: Icon(Icons.person),
+                              foregroundColor: Colors.lightBlueAccent,
+                            )
                                 : CircleAvatar(
-                                    child: Image.network(user.userPicUrl)),
+                                child: Image.network(user.userPicUrl)),
                             Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(user.name),
                                   IconButton(
@@ -83,54 +137,7 @@ class BookFinder extends StatelessWidget {
               })
         ],
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder<BFState>(
-            stream: manager.finder$,
-            builder: (context, snapshot) {
-              BFState data = snapshot.data;
-              if (data is LoadingBFState) {
-                return _loading();
-              }
-              if (data is LoadedBFState) {
-                print("snapshot");
-                BookSearch bookSearch = (snapshot.data as LoadedBFState).search;
-                List<Book> list = bookSearch.books;
-                return Column(
-                  children: [
-                    SearchTextField(bookSearch),
-                    Expanded(
-                      child: GridView.builder(
-                          padding:
-                              EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                          gridDelegate:
-                              SliverGridDelegateWithMaxCrossAxisExtent(
-                                  mainAxisSpacing: 5,
-                                  crossAxisSpacing: 5,
-                                  maxCrossAxisExtent: 140,
-                                  childAspectRatio: 120 / 240),
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return BookListItem(book: list[index]);
-                          }),
-                    )
-                  ],
-                );
-              }
-              if (data is ErrorFBState) {
-                return _initial();
-              }
-              return SearchTextField(BookSearch.empty());
-            },
-          )),
+      body: _buildContent(context, manager)
     );
-  }
-
-  Widget _initial() {
-    return SearchTextField(BookSearch.empty());
-  }
-
-  Widget _loading() {
-    return Center(child: CircularProgressIndicator());
   }
 }
