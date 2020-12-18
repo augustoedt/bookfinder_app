@@ -24,12 +24,14 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^0.5.12
-  http: ^0.12.2
+  http: any
   rxdart: ^0.24.1
   google_fonts: ^1.1.1
   get_it: ^5.0.1
   injectable: ^1.0.4
-  dartz:
+  dartz: any
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -38,7 +40,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
+  build_runner: any
+  hive_generator: ^0.8.2
   injectable_generator:
   test: any
   mockito: any

@@ -12,7 +12,13 @@ class DetailBook extends StatelessWidget {
     @required this.book,
     @required this.animation
   });
-
+  Widget _buildImage(BuildContext context, Book book){
+    return FadeInImage.assetNetwork(
+      placeholder: "img_${book.id}",
+      image: book.thumbnail,
+      fit: BoxFit.cover,
+    );
+  }
 
   Widget _buildHeader(BuildContext context) {
     return Container(
@@ -36,9 +42,7 @@ class DetailBook extends StatelessWidget {
               .headline6
               .copyWith(fontWeight: FontWeight.bold),
         ),
-        SizedBox(
-          width: 50,
-        ),
+        const SizedBox(width: 50),
       ]),
     );
   }
@@ -53,17 +57,14 @@ class DetailBook extends StatelessWidget {
               animation.pictureSize.value,
               animation.pictureSize.value, 1.0
           ),
-          child: Container(
+          child: SizedBox(
               width: 124 * 0.9,
               height: 204 * 0.9,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: book.thumbnail == null
-                    ? Center(child: Text("No Image"))
-                    : Image.network(
-                  book.filterThumbnail(),
-                  fit: BoxFit.fill,
-                ),
+                    ? const Center(child: Text("No Image"))
+                    : _buildImage(context, book),
               )),
         ),
         const SizedBox(height: 8),
@@ -90,9 +91,7 @@ class DetailBook extends StatelessWidget {
                 .headline6,
           ),
         ),
-        SizedBox(
-          height: 10,
-        )
+        const SizedBox(height: 10)
       ],
     );
   }
@@ -117,16 +116,11 @@ class DetailBook extends StatelessWidget {
           .of(context)
           .size
           .height * 0.5,
-      padding: EdgeInsets.symmetric(
-          vertical: 18, horizontal: 14),
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 14),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Theme
-              .of(context)
-              .scaffoldBackgroundColor
-              .withOpacity(0.7),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
       child: Column(
         children: [
           Expanded(
@@ -134,7 +128,7 @@ class DetailBook extends StatelessWidget {
               thickness: 10,
               child: SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.only(right: 20),
+                  padding: const EdgeInsets.only(right: 20),
                   width: double.infinity,
                   child: (book.description == "")
                       ? Text(
@@ -154,9 +148,7 @@ class DetailBook extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -170,30 +162,21 @@ class DetailBook extends StatelessWidget {
                         .of(context)
                         .accentColor,
                     color: Colors.white10,
-                    borderSide: BorderSide(color: Colors.white10, width: 2),
-                    child: Icon(
-                      Icons.bookmark_border_outlined,
-                      color: Colors.black38,
-                    ),
-                    onPressed: () {}),
+                    borderSide: const BorderSide(color: Colors.white10, width: 2),
+                    onPressed: () {},
+                    child: const Icon(Icons.bookmark_border_outlined,color: Colors.black38)
+                ),
               ),
-              SizedBox(
-                width: 12,
-              ),
+              const SizedBox(width: 12),
               Expanded(
                 child: RaisedButton(
                     color: Theme
                         .of(context)
                         .accentColor,
+                    onPressed: () {},
                     child: Text("Start Reading",
-                        style: Theme
-                            .of(context)
-                            .primaryTextTheme
-                            .headline6
-                            .copyWith(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.bold)),
-                    onPressed: () {}),
+                        style: Theme.of(context).primaryTextTheme.headline6.copyWith(color: Colors.black87,fontWeight: FontWeight.bold))
+                )
               ),
             ],
           )
@@ -215,18 +198,12 @@ class DetailBook extends StatelessWidget {
 
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Stack(
-      alignment: AlignmentDirectional.topStart,
       fit: StackFit.expand,
       children: [
-        book.thumbnail != null
-            ? Hero(
+        if (book.thumbnail != null) Hero(
           tag: book.id,
-          child: Image.network(
-            book.thumbnail,
-            fit: BoxFit.cover,
-          ),
-        )
-            : Container(),
+          child: _buildImage(context, book),
+        ) else Container(),
         BackdropFilter(
           filter: ImageFilter.blur(
               sigmaX: animation.backdropBlurX.value,

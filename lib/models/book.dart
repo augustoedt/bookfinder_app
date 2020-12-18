@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:book_finder/service/image_service.dart';
+
 class Book{
   final String kind;
   final String id;
@@ -22,29 +26,29 @@ class Book{
   });
 
   factory Book.fromJson(Map<String,dynamic> json){
-    Map<String, dynamic> volumeInfo = json['volumeInfo'] ?? {};
-    Map<String, dynamic> imageLinks = volumeInfo['imageLinks'] ?? {};
-    Map<String, dynamic> searchInfo = json['searchInfo'] ?? {};
+    final volumeInfo = json['volumeInfo'] as Map<String, dynamic> ?? {};
+    final imageLinks = volumeInfo['imageLinks'] as Map<String, dynamic> ?? {};
+    final searchInfo = json['searchInfo'] as Map<String, dynamic> ?? {};
 
     return Book(
-      kind: json['kind'] ?? null,
-      id: json['id'] ?? null,
-      title: json['title'] ?? volumeInfo['title'] ?? null,
+      kind: json['kind'] as String,
+      id: json['id'] as String,
+      title: json['title'] as String ?? volumeInfo['title'] as String,
       authors: ((json['authors'] ?? volumeInfo['authors'] ?? []) as List).map((e) => e as String).toList(),
-      publisher: json['publisher'] ?? volumeInfo['publisher'] ?? null,
-      description: json['description'] ?? volumeInfo['description'] ?? null,
-      smallThumbnail: json['smallThumbnail'] ?? imageLinks['smallThumbnail'] ?? null,
-      thumbnail: json['thumbnail'] ?? imageLinks['thumbnail'] ?? null,
-      textSnippet: json['textSnippet'] ?? searchInfo['textSnippet'] ?? null
+      publisher: json['publisher'] as String ?? volumeInfo['publisher'] as String,
+      description: json['description'] as String ?? volumeInfo['description'] as String,
+      smallThumbnail: json['smallThumbnail'] as String ?? imageLinks['smallThumbnail'] as String,
+      thumbnail: json['thumbnail'] as String ?? imageLinks['thumbnail'].replaceAll("&edge=curl", "") as String,
+      textSnippet: json['textSnippet'] as String ?? searchInfo['textSnippet'] as String
     );
   }
 
   Map<String, dynamic> toJson(){
-    Map<String, dynamic> temp = {};
+    Map<String,dynamic> temp = {} as Map<String,dynamic>;
     if(kind!=null){temp.addAll({"kind": kind});}
     if(id!=null){temp.addAll({"id": id});}
     if(title!=null){temp.addAll({"title": title});}
-    if(authors.length>0){temp.addAll({"authors": authors});}
+    if(authors.isNotEmpty){temp.addAll({"authors": authors});}
     if(publisher!=null){temp.addAll({"publisher": publisher});}
     if(description!=null){temp.addAll({"description": description});}
     if(smallThumbnail!=null){temp.addAll({"smallThumbnail": smallThumbnail});}
@@ -61,7 +65,7 @@ class Book{
   }
   String filterDescription() {
     if (description == null && textSnippet != null) {
-      return textSnippet.replaceAll(RegExp("<.+>|\&nbsp|[;\+]"), "");
+      return textSnippet.replaceAll(RegExp("<.+>|&nbsp|[;+]"), "");
     }
     if(textSnippet == null && description == null) return "No description";
 

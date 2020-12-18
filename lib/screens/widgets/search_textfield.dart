@@ -21,7 +21,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
   String searchType = "none";
   String term;
 
-  Widget _buildRow(List<String> values, {Widget child, Function onSelected}) {
+  Widget _buildRow(List<String> values,
+      {Widget child, void Function(String) onSelected}) {
     return Row(
       children: [
         child,
@@ -29,8 +30,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
             onSelected: onSelected,
             itemBuilder: (context) => values.map<PopupMenuItem<String>>((e) {
                   return PopupMenuItem(
-                    child: Text(e),
                     value: e.toLowerCase(),
+                    child: Text(e),
                   );
                 }).toList())
       ],
@@ -43,16 +44,14 @@ class _SearchTextFieldState extends State<SearchTextField> {
     return Center(
         child: Column(
       children: [
-        SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         ListTile(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Flexible(
                 flex: 8,
-                child: Container(
+                child: SizedBox(
                     width: 350,
                     child: TextField(
                       onChanged: (value) {
@@ -61,33 +60,30 @@ class _SearchTextFieldState extends State<SearchTextField> {
                         });
                       },
                       onSubmitted: (value) {
-                        print("Submitted");
                         widget.bookSearch.term = value;
                         manager.search(BookSearch.params(widget.bookSearch));
                       },
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           suffixIcon: IconButton(
                             onPressed: () {
-                              print("Icon Submit");
                               widget.bookSearch.term = term;
                               manager
                                   .search(BookSearch.params(widget.bookSearch));
                               // manager.search(BookSearch(term: value));
                             },
-                            icon: Icon(Icons.search),
+                            icon: const Icon(Icons.search),
                           )),
                     )),
               ),
               Expanded(
-                  flex: 1,
                   child: FlatButton(
                     onPressed: () {
                       setState(() {
                         showOptions = !showOptions;
                       });
                     },
-                    child: Center(child: Icon(Icons.more_vert)),
+                    child: const Center(child: Icon(Icons.more_vert)),
                   ))
             ],
           ),
@@ -96,9 +92,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: _buildRow(['relevance', 'newest'],
-                        child: Text(widget.bookSearch.sorting == null
-                            ? "relevance"
-                            : widget.bookSearch.sorting), onSelected: (value) {
+                        child: Text(widget.bookSearch.sorting ?? "relevance"),
+                        onSelected: (value) {
                       setState(() {
                         widget.bookSearch.sorting = value;
                       });
@@ -112,10 +107,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
                       'free-ebooks',
                       'paid-ebooks',
                       'ebooks'
-                    ],
-                        child: Text(widget.bookSearch.filter == null
-                            ? "none"
-                            : widget.bookSearch.filter), onSelected: (value) {
+                    ], child: Text(widget.bookSearch.filter ?? "none"),
+                        onSelected: (value) {
                       setState(() {
                         widget.bookSearch.filter = value;
                       });
@@ -131,9 +124,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                       'subject',
                       'isbn'
                     ],
-                        child: Text(widget.bookSearch.searchType == null
-                            ? "none"
-                            : widget.bookSearch.searchType),
+                        child: Text(widget.bookSearch.searchType ?? "none"),
                         onSelected: (value) {
                       setState(() {
                         widget.bookSearch.searchType = value;
@@ -143,9 +134,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: _buildRow(['none', 'all', 'books', 'magazines'],
-                        child: Text(widget.bookSearch.printType == null
-                            ? "none"
-                            : widget.bookSearch.printType),
+                        child: Text(widget.bookSearch.printType ?? "none"),
                         onSelected: (value) {
                       setState(() {
                         widget.bookSearch.printType = value;
@@ -155,15 +144,14 @@ class _SearchTextFieldState extends State<SearchTextField> {
                 ])
               : Container(),
         ),
-        widget.bookSearch.term != null
-            ? Container(
+        if (widget.bookSearch.term != null) SizedBox(
                 width: 200,
                 height: 25,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.chevron_left),
+                      icon: const Icon(Icons.chevron_left),
                       onPressed: () {
                         manager.searchLeftNavigate(widget.bookSearch);
                       },
@@ -172,7 +160,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                     Text(
                         "${widget.bookSearch.startIndex + widget.bookSearch.maxResults}/${widget.bookSearch.totalItems}"),
                     IconButton(
-                      icon: Icon(Icons.chevron_right),
+                      icon: const Icon(Icons.chevron_right),
                       onPressed: () {
                         manager.searchRightNavigate(widget.bookSearch);
                       },
@@ -180,8 +168,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                     )
                   ],
                 ),
-              )
-            : Container(),
+              ) else Container(),
       ],
     ));
   }

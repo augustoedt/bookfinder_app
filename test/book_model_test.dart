@@ -2,15 +2,15 @@ import 'package:book_finder/models/book.dart';
 import 'package:test/test.dart';
 
 void main(){
-  var items = values['items'];
+  final items = values['items'];
   List<Book> modelList;
   test("fromJson",() async {
-    modelList = (items as List).map((e) => Book.fromJson(e)).toList();
-    expect(modelList.map((e){return (e.thumbnail is String);}).toList(),[true, true, false, true, true, true, true, false, true, true]);
-    expect(modelList.map((e){return (e.authors.length);}).toList(),[0, 1, 1, 1, 2, 1, 1, 1, 1, 1]);
+    modelList = (items as List).map((e) => Book.fromJson(e as Map< String, dynamic>)).toList();
+    expect(modelList.map((e){return e.thumbnail is String;}).toList(),[true, true, false, true, true, true, true, false, true, true]);
+    expect(modelList.map((e){return e.authors.length;}).toList(),[0, 1, 1, 1, 2, 1, 1, 1, 1, 1]);
   });
   test("toJson",(){
-    var map = (items as List);
+    var map = items as List;
     for(int i=0;i<map.length;i++) {
       expect(modelList[i].toJson()['authors'] ?? [],
           items[i]['volumeInfo']['authors'] ?? []);
@@ -21,11 +21,11 @@ void main(){
       expect(modelList[i].toJson()['description'],
           items[i]['volumeInfo']['description']);
       expect(modelList[i].toJson()['thumbnail'],
-          (items[i]['volumeInfo']['imageLinks']??{})['thumbnail'] ?? null);
-      expect(modelList[i].toJson()['smallThumbnail'] ?? null,
+          (items[i]['volumeInfo']['imageLinks']??{})['thumbnail']);
+      expect(modelList[i].toJson()['smallThumbnail'],
           (items[i]['volumeInfo']['imageLinks']??{})['smallThumbnail']);
       expect(modelList[i].toJson()['textSnippet'],
-          (items[i]['searchInfo']??{})['textSnippet'] ?? null);
+          (items[i]['searchInfo']??{})['textSnippet'] );
     }
   });
 }

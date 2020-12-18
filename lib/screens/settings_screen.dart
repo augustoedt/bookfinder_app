@@ -1,11 +1,11 @@
-import 'package:book_finder/manager/theme_manager.dart';
+import 'package:book_finder/manager/global_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ThemeManager manager = GetIt.I.get<ThemeManager>();
+    final manager = GetIt.I.get<GlobalManager>();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -18,7 +18,7 @@ class SettingsScreen extends StatelessWidget {
               title: RaisedButton(
                     color: Theme.of(context).accentColor,
                     onPressed: (){manager.switchTheme();},
-                    child: Text("Change Theme")
+                    child: const Text("Change Theme")
               ),
             )
           ],

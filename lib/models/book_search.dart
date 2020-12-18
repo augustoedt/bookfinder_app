@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'book.dart';
 
 class BookSearch{
@@ -5,12 +7,12 @@ class BookSearch{
   int totalItems;
   int maxResults;
   int startIndex = 0;
-  String searchType; // intitle, inauthor, inpublisher, subject, isbn
-  String sorting; // relevance , newest
-  String filter; // full , free-ebooks, paid-ebooks, ebooks
+  String searchType;
+  String sorting;
+  String filter;
   String printType;
   List<Book> books;
-
+  List<Uint8List> uThumbnais;
   BookSearch({
     this.totalItems,
     this.term,

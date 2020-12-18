@@ -4,19 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService{
   static Future<User> loadLocalUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String content = prefs.getString('localUser') ?? "no-user";
-    if(content=="no-user"){
-      print("load no-user");
-      User _user = User(userPicUrl: "", name: "DefaultUser", favorites: []);
-      String userContent = json.encode(_user.toJson());
-      await prefs.setString('localUser', userContent);
+
+    final prefs = await SharedPreferences.getInstance();
+    final content = prefs.getString('localUser');
+    prefs.clear();
+    if(content!=null){
+      final User _user= User.fromJson(json.decode(content) as Map<String, dynamic>);
       return _user;
-    }
-    else{
-      print("load user");
-      User _user= User.fromJson(json.decode(content));
-      return _user;
+    }else{
+      prefs.setString("localUser", json.encode(User.empty()));
+      return User.empty();
     }
   }
 }

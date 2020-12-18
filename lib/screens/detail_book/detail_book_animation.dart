@@ -5,7 +5,7 @@ class DetailBookAnimation {
       : backdropBlurX = Tween(begin: 0.0, end: 50.0).animate(
           CurvedAnimation(
             parent: controller,
-            curve: Interval(
+            curve: const Interval(
                 0.15,
                 0.65,
                 curve: Curves.ease
@@ -13,7 +13,7 @@ class DetailBookAnimation {
         backdropBlurY = Tween(begin: 0.0, end: 5.0).animate(
             CurvedAnimation(
                 parent: controller,
-                curve: Interval(
+                curve: const Interval(
                     0.15,
                     0.65,
                     curve: Curves.ease
@@ -21,7 +21,7 @@ class DetailBookAnimation {
         backdropOpacity = Tween(begin: 0.0, end: 0.5).animate(
           CurvedAnimation(
             parent: controller,
-            curve:  Interval(
+            curve:  const Interval(
                 0.15,
                 0.650,
                 curve: Curves.ease
@@ -29,7 +29,7 @@ class DetailBookAnimation {
         descriptionOpacity = Tween(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: controller,
-            curve: Interval(
+            curve: const Interval(
                 0.5,
                 0.65,
               curve: Curves.fastOutSlowIn
@@ -37,7 +37,7 @@ class DetailBookAnimation {
         descriptionScrollerYTranslation = Tween(begin: 60.0, end: 0.0).animate(
             CurvedAnimation(
                 parent: controller,
-                curve: Interval(
+                curve: const Interval(
                     0.5,
                     0.65,
                     curve: Curves.slowMiddle
@@ -45,7 +45,7 @@ class DetailBookAnimation {
         titleOpacity = Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: controller,
-                curve: Interval(
+                curve: const Interval(
                     0.8,
                     0.9,
                     curve: Curves.ease
@@ -53,7 +53,7 @@ class DetailBookAnimation {
         authorsOpacity = Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: controller,
-                curve: Interval(
+                curve: const Interval(
                     0.65,
                     0.80,
                     curve: Curves.ease
@@ -61,7 +61,7 @@ class DetailBookAnimation {
         pictureSize = Tween(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: controller,
-                curve: Interval(
+                curve: const Interval(
                     0.80,
                     1.0,
                     curve: Curves.elasticIn
