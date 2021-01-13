@@ -44,67 +44,72 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DetailBookAnimator(book)));
-      },
-      child: Column(
-        children: [
-          Stack(
+    return Material(
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DetailBookAnimator(book)));
+        },
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          child: Column(
             children: [
-              if (book.thumbnail == null)
-                Container(
-                  width: 128 * .8,
-                  height: 204 * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black12, width: 3)),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: const Center(child: Text("No Image"))),
-                )
-              else
-                Hero(
-                  tag: book.id,
-                  child: SizedBox(
-                    width: 128 * .8,
-                    height: 204 * 0.8,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: _imageDisplay(context, book)
-                        // child: Image.network(book.thumbnail.replaceAll("&edge=curl", ""), fit: BoxFit.fill,),
-                        ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SizedBox(
-              width: 128 * .8,
-              child: Column(
+              Stack(
                 children: [
-                  Text(book.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).primaryTextTheme.headline6),
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  if (book.authors != null)
-                    Text(
-                      book.authors.join(", "),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).primaryTextTheme.subtitle2,
+                  if (book.thumbnail == null)
+                    Container(
+                      width: 128 * .8,
+                      height: 204 * 0.8,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black12, width: 3)),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: const Center(child: Text("No Image"))),
                     )
                   else
-                    Container()
+                    Hero(
+                      tag: book.id,
+                      child: SizedBox(
+                        width: 128 * .8,
+                        height: 204 * 0.8,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: _imageDisplay(context, book)
+                            // child: Image.network(book.thumbnail.replaceAll("&edge=curl", ""), fit: BoxFit.fill,),
+                            ),
+                      ),
+                    )
                 ],
-              ))
-        ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                  width: 128 * .8,
+                  child: Column(
+                    children: [
+                      Text(book.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).primaryTextTheme.headline6),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      if (book.authors != null)
+                        Text(
+                          book.authors.join(", "),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).primaryTextTheme.subtitle2,
+                        )
+                      else
+                        Container()
+                    ],
+                  ))
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -11,8 +11,8 @@ import 'package:get_it/get_it.dart';
 import 'book_list_item.dart';
 
 class BookFinder extends StatelessWidget {
-  Widget _initial() {
-    return SearchTextField(BookSearch.empty());
+  Widget _initial(BuildContext context) {
+    return SearchTextField(BookSearch.empty(), context);
   }
 
   Widget _loading() {
@@ -20,6 +20,8 @@ class BookFinder extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, BookFinderManager manager){
+    Size size = MediaQuery.of(context).size;
+    print(size.width);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: StreamBuilder<BFState>(
@@ -32,35 +34,46 @@ class BookFinder extends StatelessWidget {
             if (data is LoadedBFState) {
               final bookSearch = (snapshot.data as LoadedBFState).search;
               final bookList = bookSearch.books;
-              return Column(
-                children: [
-                  SearchTextField(bookSearch),
-                  _buildGrid(context, bookList)
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SearchTextField(bookSearch, context),
+                    ConstrainedBox(
+                        constraints: const BoxConstraints(
+                            maxWidth: 800,
+                        ),
+                        child: _buildGrid(context, bookList)
+                    )
+                  ],
+                ),
               );
             }
             if (data is ErrorFBState) {
-              return _initial();
+              return _initial(context);
             }
-            return SearchTextField(BookSearch.empty());
+            return SearchTextField(BookSearch.empty(), context);
           },
         ));
   }
 
   Widget _buildGrid(BuildContext context, List<Book> booklist){
     return Expanded(
-      child: GridView.builder(
-          padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-          gridDelegate:
-          const SliverGridDelegateWithMaxCrossAxisExtent(
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
-              maxCrossAxisExtent: 140,
-              childAspectRatio: 120 / 240),
-          itemCount: booklist.length,
-          itemBuilder: (context, index) {
-            return BookListItem(book: booklist[index]);
-          }),
+      child: Wrap(
+        children: List.generate(
+            booklist.length, (index) =>BookListItem(book: booklist[index])),
+      ),
+      // child: GridView.builder(
+      //     padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+      //     gridDelegate:
+      //     const SliverGridDelegateWithMaxCrossAxisExtent(
+      //         mainAxisSpacing: 5,
+      //         crossAxisSpacing: 5,
+      //         maxCrossAxisExtent: 140,
+      //         childAspectRatio: 120 / 240),
+      //     itemCount: booklist.length,
+      //     itemBuilder: (context, index) {
+      //       return BookListItem(book: booklist[index]);
+      //     }),
     );
   }
   @override

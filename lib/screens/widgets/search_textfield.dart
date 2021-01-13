@@ -6,8 +6,9 @@ import 'package:get_it/get_it.dart';
 
 class SearchTextField extends StatefulWidget {
   BookSearch bookSearch;
+  BuildContext context;
 
-  SearchTextField(this.bookSearch);
+  SearchTextField(this.bookSearch, this.context);
 
   @override
   _SearchTextFieldState createState() => _SearchTextFieldState();
@@ -28,7 +29,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
         child,
         PopupMenuButton<String>(
             onSelected: onSelected,
-            itemBuilder: (context) => values.map<PopupMenuItem<String>>((e) {
+            itemBuilder: (context) => values
+                .map<PopupMenuItem<String>>((e) {
                   return PopupMenuItem(
                     value: e.toLowerCase(),
                     child: Text(e),
@@ -76,15 +78,17 @@ class _SearchTextFieldState extends State<SearchTextField> {
                           )),
                     )),
               ),
-              Expanded(
-                  child: FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        showOptions = !showOptions;
-                      });
-                    },
-                    child: const Center(child: Icon(Icons.more_vert)),
-                  ))
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 30),
+                child: FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      showOptions = !showOptions;
+                    });
+                  },
+                  child: const Center(child: Icon(Icons.more_vert)),
+                ),
+              )
             ],
           ),
           subtitle: showOptions
@@ -92,8 +96,8 @@ class _SearchTextFieldState extends State<SearchTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: _buildRow(['relevance', 'newest'],
-                        child: Text(widget.bookSearch.sorting ?? "relevance"),
-                        onSelected: (value) {
+                    child: Text(widget.bookSearch.sorting ?? "relevance"),
+                    onSelected: (value) {
                       setState(() {
                         widget.bookSearch.sorting = value;
                       });
