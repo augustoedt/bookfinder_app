@@ -58,6 +58,11 @@ class GlobalManager implements ThemeManager, LoginManager {
     }
   }
 
+  @override
+  bool isLogged(){
+    return _user.isLogged;
+  }
+
 }
 
 class GlobalState{
