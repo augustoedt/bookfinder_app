@@ -120,7 +120,10 @@ class DetailBook extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25)
+          )),
       child: Column(
         children: [
           Expanded(
